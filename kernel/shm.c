@@ -10,9 +10,9 @@
 
 // * Represents the shared memory mapping table, including a spinlock for synchronization.
 // * Each entry contains:
-// * - `id`: Unique identifier for the shared memory.
-// * - `pa`: Physical address of the shared memory.
-// * - `ct`: Reference count of processes using the shared memory.
+// * - id: Unique identifier for the shared memory.
+// * - pa: Physical address of the shared memory.
+// * - ct: Reference count of processes using the shared memory.
 struct {
   struct spinlock lock;
   struct {
