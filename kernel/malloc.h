@@ -27,7 +27,7 @@ typedef struct block {
 struct FreeList {
   struct spinlock lock;
   Block scale[SCALE_NUMBER];
-  char *table, *reman;
+  char *procs, *reman;
 } freelist;
 
 // * Represents the metadata header for an 

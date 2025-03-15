@@ -62,9 +62,9 @@ list_find_index(
 ) {
   Block temp = freelist.scale[scale];
   if (temp) {
-    if (EQUAL_OR_ZERO(freelist.table[PAGE_INDEX((uint64) temp)], index)) return list_pop(scale);
+    if (EQUAL_OR_ZERO(freelist.procs[PAGE_INDEX((uint64) temp)], index)) return list_pop(scale);
     for (; temp->next; temp = temp->next) {
-      if (EQUAL_OR_ZERO(freelist.table[PAGE_INDEX((uint64) temp->next)], index)) {
+      if (EQUAL_OR_ZERO(freelist.procs[PAGE_INDEX((uint64) temp->next)], index)) {
         Block ans = temp->next;
         temp->next = ans->next;
         return (uint64) ans;
@@ -112,7 +112,7 @@ list_info(
     printf("\n(Occupier of each Page in HEAP)\n");
     for (int i = 0; i < PAGE_SIZE; i++) {
       if (i % 64 == 0) printf("\n");
-      printf("%d ", (int) freelist.table[i]);
+      printf("%d ", (int) freelist.procs[i]);
     }
     printf("\n");
   }
@@ -142,8 +142,8 @@ init_malloc(
   freelist.scale[SCALE_NUMBER - 1] = (Block) STACK_STOP;
   memset(freelist.scale[SCALE_NUMBER - 1], 0, HEAP_SIZE);
   
-  freelist.table = (char*) kalloc();
-  memset(freelist.table, 0, PAGE_SIZE);
+  freelist.procs = (char*) kalloc();
+  memset(freelist.procs, 0, PAGE_SIZE);
 
   freelist.reman = (char*) kalloc();
   memset(freelist.reman, 0, PAGE_SIZE);
@@ -193,7 +193,7 @@ found:
 #endif // DEBUG_MODE
 
   *ret_scale = minscale;
-  memset(freelist.table + PAGE_INDEX(block), proc_index(p), SCALE_TO_PAGE(minscale)); 
+  memset(freelist.procs + PAGE_INDEX(block), proc_index(p), SCALE_TO_PAGE(minscale)); 
 
   release(&freelist.lock);
   return block;
@@ -256,7 +256,7 @@ free(
   }
 
 success:
-  memset(freelist.table + PAGE_INDEX((uint64) ptr), 0, SCALE_TO_PAGE(sed_scale));
+  memset(freelist.procs + PAGE_INDEX((uint64) ptr), 0, SCALE_TO_PAGE(sed_scale));
   release(&freelist.lock);
 }
 
