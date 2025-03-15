@@ -193,8 +193,6 @@ found:
 #endif // DEBUG_MODE
 
   *ret_scale = minscale;
-  memset(freelist.procs + PAGE_INDEX(block), proc_index(p), SCALE_TO_PAGE(minscale)); 
-
   release(&freelist.lock);
   return block;
 }
@@ -214,9 +212,13 @@ malloc_wrapper(
   head->scale = scale;
 
   // Mapping malloced space to proc pagetable
-  if (freelist.reman[PAGE_INDEX(head)]++ == 0) 
+  acquire(&freelist.lock);
+  if (freelist.reman[PAGE_INDEX(head)]++ == 0) {
     mappages(p->pagetable, (uint64) head, size + sizeof(Header), (uint64) head, PTE_U | PTE_R | PTE_W);
-  
+    memset(freelist.procs + PAGE_INDEX(head), proc_index(p), SCALE_TO_PAGE(scale)); 
+  }
+  release(&freelist.lock);
+
   return (void*) (head + 1);
 }
 
@@ -256,7 +258,6 @@ free(
   }
 
 success:
-  memset(freelist.procs + PAGE_INDEX((uint64) ptr), 0, SCALE_TO_PAGE(sed_scale));
   release(&freelist.lock);
 }
 
@@ -273,8 +274,10 @@ free_wrapper(
   // Unmapping pages from proc pagetable
   acquire(&freelist.lock);
   if (--freelist.reman[PAGE_INDEX((uint64) head)] == 0) {
-    for (uint64 va = (uint64) head; va <= (uint64) head + SCALE_TO_SIZE(head->scale) - 1; va += PAGE_SIZE) 
+    for (uint64 va = (uint64) head; va <= (uint64) head + SCALE_TO_SIZE(head->scale) - 1; va += PAGE_SIZE) {
       *walk(p->pagetable, va, 0) = 0;
+      memset(freelist.procs + PAGE_INDEX(head), 0, SCALE_TO_PAGE(head->scale));
+    }
   }
   release(&freelist.lock);
 
