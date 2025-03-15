@@ -20,7 +20,7 @@ main()
     kvminit();       // create kernel page table
     kvminithart();   // turn on paging
     
-    init_malloc();   // ! Init Malloc 
+    init_heap();   // ! Init Malloc 
     
     procinit();      // process table
     trapinit();      // trap vectors

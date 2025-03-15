@@ -134,7 +134,7 @@ list_info(
 // * Initializes the memory allocator, including 
 // * the free list and metadata tables.
 void
-init_malloc(
+init_heap(
   void
 ) {
   initlock(&freelist.lock, "malloc lock");

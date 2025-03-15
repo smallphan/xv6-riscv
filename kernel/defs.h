@@ -66,7 +66,7 @@ void            kinit(void);
 
 // malloc.c
 // void            test_malloc(void);
-void            init_malloc(void);
+void            init_heap(void);
 
 // log.c
 void            initlog(int, struct superblock*);
