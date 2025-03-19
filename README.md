@@ -7,7 +7,7 @@ A Simple Implement of Malloc and Share Memory Mechanism in xv-6 System.
     - Buddy system
     - Process Isolation of Physical Blocks
 
-![Malloc](https://github.com/smallphan/xv6-riscv/blob/master/pics/malloc.png)
+![Malloc](pics/malloc.png)
 
 (2) Share Memory
 - Main file: kernel/shm.c
@@ -15,7 +15,7 @@ A Simple Implement of Malloc and Share Memory Mechanism in xv-6 System.
     - Hash function for generating complex and unique ID
     - Automatic share memory release
 
-![Shm](https://github.com/smallphan/xv6-riscv/blob/master/pics/shm.png)
+![Shm](pics/shm.png)
 
 --------------------------------------------------------------------------
 
