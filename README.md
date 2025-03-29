@@ -2,7 +2,7 @@
 A Simple Implement of Malloc and Share Memory Mechanism in xv-6 System.
 
 (1) Malloc
-- Main files: kernel/malloc.h kernel/malloc.c
+- Main files: [kernel/malloc.h](https://github.com/smallphan/xv6-riscv/blob/master/kernel/malloc.h) [kernel/malloc.c](https://github.com/smallphan/xv6-riscv/blob/master/kernel/malloc.c)
 - Features: 
     - Buddy system
     - Process Isolation of Physical Blocks
@@ -10,7 +10,7 @@ A Simple Implement of Malloc and Share Memory Mechanism in xv-6 System.
 ![Malloc](pics/malloc.png)
 
 (2) Share Memory
-- Main file: kernel/shm.c
+- Main file: [kernel/shm.c](https://github.com/smallphan/xv6-riscv/blob/master/kernel/shm.c)
 - Features:
     - Hash function for generating complex and unique ID
     - Automatic share memory release
